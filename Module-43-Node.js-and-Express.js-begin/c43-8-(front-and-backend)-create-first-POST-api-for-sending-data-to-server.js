@@ -24,22 +24,6 @@
     });
 
 
--Now install CORS to define the origin 
-  -go to : https://expressjs.com/en/resources/middleware/cors/
-          or, go to chatgpt (I use it)
-
-  -copy this : npm install cors
-  -paste to backend terminal
-
-  -again copy this  and paste to index.js 
-
-    import cors from "cors";
-
-    app.use(cors({
-      origin: "http://localhost:3000",
-    }));
-
-
 
 ✅✅Step-2: Use/Send data usign the Post Api (frontend) : full code at the bottom
 
@@ -73,6 +57,10 @@
     console.log("Response from backend",result)
 
 -now submit the form
+
+
+
+
 
 -The result will be like this :
 
