@@ -84,6 +84,14 @@
   data from client { name: 'Raju Ahm', email: 'dhaka@jan.com' }
 
 
+-After redirected to users page the data will show like this :
+    Users are coming soon: 6
+    A :aaa@gmail.com
+    B :bbb@gmail.com
+    C :ccc@gmail.com
+    D :ddd@gmai.com
+    dfdd :dhaka@jan.com
+    ffffffff :dhaka@jan.com
 
 
 ###################################### index.js (backend) ##############################################
@@ -126,10 +134,17 @@
         })
 
 
-        app.post('/users', (req, res) => {
-          console.log("data from client",req.body);
-          res.send({success:true,message:"user added successfully"} );
-        });
+       app.post('/users', (req, res) => {
+       console.log("data from client",req.body);
+
+      //temporary data storage (c43-9)
+        const newUser = req.body;
+        newUser.id = users.length+1;
+        users.push(newUser);
+
+        res.send({success:true,message:"user added successfully"} );
+      });
+
 
 
         app.listen(port, () => {
@@ -153,6 +168,7 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { redirect } from "next/navigation";
 
 const AddUserPage = () => {
 
@@ -175,6 +191,11 @@ const AddUserPage = () => {
 
     const result = await response.json();
     console.log("Response from backend",result)
+
+    // show data (c43-9)
+    if(result.success){
+        redirect("/users")
+    }
 
   };
 
@@ -217,6 +238,7 @@ const AddUserPage = () => {
 };
 
 export default AddUserPage;
+
 
 
 

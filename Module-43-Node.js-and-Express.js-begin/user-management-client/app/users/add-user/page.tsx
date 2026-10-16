@@ -9,6 +9,7 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { redirect } from "next/navigation";
 
 const AddUserPage = () => {
 
@@ -31,6 +32,11 @@ const AddUserPage = () => {
 
     const result = await response.json();
     console.log("Response from backend",result)
+
+    // show data (c43-9)
+    if(result.success){
+        redirect("/users")
+    }
 
   };
 
