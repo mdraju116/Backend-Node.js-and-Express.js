@@ -8,10 +8,14 @@ const port = process.env.port || 5000;
 
 app.use(
   cors({
-    // origin: "http://localhost:3000",
+    origin: "http://localhost:3000",
   }),
 );
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 // connect to database
 const client = new MongoClient(
@@ -43,9 +47,16 @@ export async function disconnectFromMongoDB() {
   await client.close();
 }
 
+// post users to database
+app.post("/users", async (req, res) => {
+  const newUser = req.body;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+  console.log("data from client", newUser); //message to server console
+  // res.send({ success: true, message: "user added successfully" }); //message to frontend console
+  // don't use multiple send because it's a single insert
+
+  const result = await users.insertOne(newUser);
+  res.send(result);
 });
 
 app.listen(port, () => {
