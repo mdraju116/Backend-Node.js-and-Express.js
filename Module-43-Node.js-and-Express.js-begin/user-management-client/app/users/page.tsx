@@ -1,15 +1,21 @@
+import { Suspense } from "react";
+import Users from "../components/Users";
+
+const userPromise =async()=> {
+      const response = await fetch("http://localhost:5000/users");
+      return response.json();
+}
+
 
 const UsersPage = async () => {
-  const response = await fetch("http://localhost:5000/users");
-  const userData = await response.json();
-  
+
   return (
     <div>
-      <h2>Users are coming soon: {userData.length}</h2>
+        {/* Use suspense to remove fetching issue */}
+        <Suspense fallback={<h2>loading users...</h2>}>
+            <Users userPromise={userPromise()}></Users>
+        </Suspense>
 
-      {userData.map((user: { id: number; name: string }) => (
-        <p key={user.id}>{user.name}</p>
-      ))}
     </div>
   );
 };

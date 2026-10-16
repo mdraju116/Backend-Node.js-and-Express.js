@@ -1,7 +1,17 @@
 import express from "express";
+import cors from "cors"
 
 const app = express();
 const port = process.env.port || 5000;
+
+app.use(cors({
+  origin: "http://localhost:3000",
+}));
+
+// parse requests with a Content-Type of application/json
+app.use(express.json());
+
+
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -25,6 +35,13 @@ const users=[
 app.get("/users",(req,res)=>{
     res.send(users);
 })
+
+
+app.post('/users', (req, res) => {
+  console.log("data from client",req.body);
+  res.send({success:true,message:"user added successfully"} );
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

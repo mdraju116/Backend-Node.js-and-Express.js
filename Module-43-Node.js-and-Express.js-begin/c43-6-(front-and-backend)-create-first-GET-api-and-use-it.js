@@ -1,6 +1,6 @@
 /* 
 
-Step-1:Create Api
+✅✅Step-1:Create the Api in backend
 -create a array of object in the index.js
 
     const users=[
@@ -17,7 +17,8 @@ Step-1:Create Api
     })
 
 
-Step-2 : Use the api in Frontend Project
+✅✅Step-2 : Use the api in Frontend Project
+
 -create a new client project using Next.js
 -npx create-next-app@latest user-management-client --yes
 
@@ -33,8 +34,8 @@ const UsersPage = async () => {
     <div>
       <h2>Users are coming soon: {userData.length}</h2>
 
-      {userData.map((user: { id: number; name: string }) => (
-        <p key={user.id}>{user.name}</p>
+      {userData.map((user: { id: number; name: string; email:string }) => (
+        <p key={user.id}>{user.name} :{user.email}</p>
       ))}
     </div>
   );

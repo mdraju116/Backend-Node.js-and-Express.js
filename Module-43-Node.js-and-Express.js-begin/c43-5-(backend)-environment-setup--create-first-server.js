@@ -75,4 +75,11 @@
     -type : nodemon index.js
     -go to browser and see the output
 
+
+✅✅Step-5 : Create a .gitignore file (before commit/push)
+    -create a new file named : .gitignore (where the package.json has)
+    -type : node_modules inside the file
+    -now you can push
+
+
 */
