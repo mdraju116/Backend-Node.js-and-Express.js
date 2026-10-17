@@ -44,9 +44,11 @@
 -Create a handleUpdateUser
 -create patchMethod inside the handleUpdateUser
 -Call the <UpdateUser/> at UserCard.tsx and get {user} as props 
-
+-use router.refresh and useState too
 
 #######################  ✅✅Full UpdateUser.tsx      ############################
+
+"use client"
 
 import { UserType } from "@/app/users/page"
 import { Button } from "@/components/ui/button"
@@ -63,38 +65,50 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 interface UserProps {
   user: UserType
 }
 const Updateuser = ({ user }: UserProps) => {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
 
-const handleUpdateUser = async(e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  const formData = new FormData(e.currentTarget);
-  const updatedUser = Object.fromEntries(formData.entries());
-  console.log("Updated User:",updatedUser);
+    const formData = new FormData(e.currentTarget)
+    const updatedUser = Object.fromEntries(formData.entries())
+    console.log("Updated User:", updatedUser)
 
-  const response = await fetch(`http://localhost:5000/users/${user._id}`,{
-    method:"PATCH",
-    headers:{
-        'Content-Type':'application/json'
-    },
-    body:JSON.stringify(updatedUser),
-  });
-  const result = await response.json();
-  console.log("Response from server:",result);
+    const response = await fetch(`http://localhost:5000/users/${user._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedUser),
+    })
+    const result = await response.json()
+    console.log("Response from server:", result)
 
-  if(result.modifiedCount>0){
-    alert("User Updated Successfully");
+    if (result.modifiedCount > 0) {
+      alert("User Updated Successfully");
+       setOpen(false);
+      router.refresh();
+    }
   }
 
-}
-
   return (
-    <Dialog>
-      <DialogTrigger render={<Button variant="outline" className={"mx-4"}>  Edit</Button> }/>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger
+        render={
+          <Button variant="outline" className={"mx-4"}>
+            {" "}
+            Edit
+          </Button>
+        }
+      />
       <DialogContent className="sm:max-w-sm">
         <form onSubmit={handleUpdateUser}>
           <DialogHeader>
