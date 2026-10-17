@@ -59,11 +59,30 @@ app.post("/users", async (req, res) => {
 
 // find single-user by id
 app.get("/users/:id",async(req,res)=>{
-  console.log("userId:",req.params);
+  console.log("Found userId:",req.params);
   const id = req.params.id;
 
   const query = {_id:new ObjectId(id)}
   const result = await users.findOne(query);
+  res.send(result);
+
+})
+
+// update single-user
+app.patch("/users/:id",async(req,res)=>{
+  const id=req.params.id;
+  const updatedUser = req.body;
+  console.log("Updating User:",id , updatedUser );
+
+  const filter={_id:new ObjectId(id)}
+  // const options = {upsert:true}
+  const updateDoc= {
+    $set:{
+      name:updatedUser.name,
+      email:updatedUser.email,
+    }
+  }
+  const result= await users.updateOne(filter,updateDoc);
   res.send(result);
 
 })
