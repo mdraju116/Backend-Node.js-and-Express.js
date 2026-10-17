@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import "dotenv/config";
 
 const app = express();
@@ -30,6 +30,10 @@ export async function connectToMongoDB() {
     console.dir(err);
   }
 }
+// Call this only when your application terminates
+export async function disconnectFromMongoDB() {
+  await client.close();
+}
 
 // get users from database
 const connectedClient = await connectToMongoDB();
@@ -42,15 +46,9 @@ app.get("/users", async (req, res) => {
   res.send(allUsers);
 });
 
-// Call this only when your application terminates
-export async function disconnectFromMongoDB() {
-  await client.close();
-}
-
 // post users to database
 app.post("/users", async (req, res) => {
   const newUser = req.body;
-
   console.log("data from client", newUser); //message to server console
   // res.send({ success: true, message: "user added successfully" }); //message to frontend console
   // don't use multiple send because it's a single insert
@@ -58,6 +56,18 @@ app.post("/users", async (req, res) => {
   const result = await users.insertOne(newUser);
   res.send(result);
 });
+
+// find single-user by id
+app.get("/users/:id",async(req,res)=>{
+  console.log("userId:",req.params);
+  const id = req.params.id;
+
+  const query = {_id:new ObjectId(id)}
+  const result = await users.findOne(query);
+  res.send(result);
+
+})
+
 
 app.listen(port, () => {
   console.log(`CRUD server is running on port ${port}`);
