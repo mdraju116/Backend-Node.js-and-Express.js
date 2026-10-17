@@ -68,6 +68,15 @@ app.get("/users/:id",async(req,res)=>{
 
 })
 
+// Delete a single-user
+app.delete("/users/:id",async(req,res)=>{
+  const id =req.params.id;
+  const query = {_id:new ObjectId(id)}
+  const result= await users.deleteOne(query);
+  res.send(result);
+})
+
+
 
 app.listen(port, () => {
   console.log(`CRUD server is running on port ${port}`);
