@@ -4,7 +4,7 @@
 -then go to the Doc Link : MongoDB Query and Operators 
 -or,directly go to : https://docs.google.com/document/d/1gJ1U0Koi1PzxXpa_HBQR5-iQ6w0bhXE2SIF8DJBE64A/edit?tab=t.0
 
--go to page:30
+-go to page:33
 
 ✅✅Projection & Sorting
 
@@ -46,7 +46,8 @@ db.jobs.find({}, { title: 1, salary: 1, _id: 0 }).sort({ salary: -1 })
 db.jobs.find().sort({ location: 1, salary: -1 })
 
 
-✅✅📌 limit() এবং skip() — পেজিনেশন
+✅✅ limit() এবং skip() — পেজিনেশন
+
 প্রথম ৫টা চাকরি দেখাও:
 db.jobs.find().limit(5)
 পেজিনেশন — Page 2 দেখাও (প্রতি পেজে ৫টা):
