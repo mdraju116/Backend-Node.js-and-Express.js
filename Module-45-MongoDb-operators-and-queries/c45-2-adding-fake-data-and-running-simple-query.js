@@ -21,7 +21,8 @@
 -//1.to find all jobs
 db.jobs.find();
 
--➡️to run : select the query then press,(ctrl + Enter) or Click Run at the topbar 
+-➡️to run : select the query line/or,just keep the mouse pointer at the end of that line
+- then press,(ctrl + Enter) or Click Run at the topbar 
 
 -//2.to find only one/first job
 db.jobs.findOne();
