@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import toast from "react-hot-toast"
 
 const categories = [
   "Beach",
@@ -48,7 +49,7 @@ const initialForm: PackageForm = {
   description: "",
 }
 
-export default function AddPackagePage() {
+export default function AddDestination() {
   const [form, setForm] = React.useState<PackageForm>(initialForm)
 
   const handleChange = (
@@ -58,18 +59,30 @@ export default function AddPackagePage() {
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
-    const res = await fetch("http://localhost:5000/add-package", {
-        method : "POST",
-        headers : {
-            "Content-Type": "application/json",
+
+    try {
+      const res = await fetch("http://localhost:5000/add-package", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(form),
-    })
-    const result = await res.json();
-    console.log("Response from backend",result)
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to add destination")
+      }
+
+      const result = await res.json()
+      console.log("Response from backend", result)
+
+      toast.success("Destination added successfully!")
+    } catch (error) {
+      toast.error("Failed to add destination!")
+      console.error(error)
+    }
   }
 
   const handleCancel = () => setForm(initialForm)

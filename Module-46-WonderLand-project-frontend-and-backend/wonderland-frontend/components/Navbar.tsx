@@ -3,7 +3,8 @@ import { UserRound } from "lucide-react"
 
 const leftLinks = [
   { label: "Home", href: "/", active: true },
-  { label: "Destinations", href: "/destinations" },
+  { label: "Destinations", href: "/all-destinations" },
+  { label: "Add-Destination", href: "/add-destination" },
   { label: "My Bookings", href: "/my-bookings" },
   { label: "Admin", href: "/admin" },
 ]

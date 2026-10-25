@@ -11,18 +11,32 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # wonderland-frontend (Wanderlust travel site, Module 46)
 
 Next.js 16 App Router + React 19 + Tailwind v4 + shadcn/ui (style `base-nova`) + next-themes.
-No tests, no backend yet (no API calls in the codebase).
+No tests.
+
+## Backend (sibling folder)
+
+The API lives in `../wonderland-backend` — Express 5 + MongoDB, run with `node index.js`
+from that folder (port 5000, CORS locked to `http://localhost:3000`, needs its `.env`
+with `MONGODB_URI`). Endpoints: `POST /add-package`, `GET /packages`.
+This frontend hardcodes `http://localhost:5000` in `app/(pages)/add-destination/page.tsx`
+(no env-based API base). The backend must be running for that form to succeed.
 
 ## Structure
 
-- `app/` — `layout.tsx` (Geist/Geist_Mono via `next/font/google`, wraps children in
-  `ThemeProvider`, `cn` on `<html>`), `page.tsx` (still the shadcn starter scaffold),
-  `globals.css` (all Tailwind v4 / theme config lives here — no `tailwind.config`).
+- `app/layout.tsx` — Geist/Geist_Mono via `next/font/google`, `cn` on `<html>`, renders
+  `Navbar` → `ThemeProvider` → `Toaster` (react-hot-toast) → `Footer`.
+  `app/page.tsx` — home page composing `Banner`/`WhyChooseUs`/`Testimonials`/`CTA`.
+- `app/(pages)/` — route group: `add-destination` (client form posting to the backend),
+  `all-destinations` (empty stub, not built yet).
+- `app/globals.css` — all Tailwind v4 / theme config lives here (no `tailwind.config`).
+- `components/` — site sections (Navbar, Footer, Banner, CTA, Testimonials, WhyChooseUs).
 - `components/ui/` — shadcn components only; add with `npx shadcn@latest add <name>`.
-- `components/theme-provider.tsx` — next-themes wrapper (press `d` to toggle dark mode).
+- `components/theme-provider.tsx` — next-themes wrapper (press `d` to toggle dark mode;
+  ignored while typing in inputs).
 - `lib/utils.ts` — the `cn` helper; `hooks/` — empty placeholder (just `.gitkeep`).
-- `assets/` — design originals (`.penpot`, `.fig`, `Design-pdf.pdf`, source images).
-  Reference images from here for building pages; ship runtime images via `public/`.
+- `assets/` — design originals (`.penpot`, `.fig`, `Design-pdf.pdf`) **and** runtime images:
+  components static-import PNGs via `@/assets/*.png` into `next/image`. `public/` is an
+  empty placeholder.
 
 ## Verify before done
 

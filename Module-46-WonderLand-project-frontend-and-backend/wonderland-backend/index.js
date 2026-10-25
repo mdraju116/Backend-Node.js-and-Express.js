@@ -43,13 +43,14 @@ app.post("/add-package", async (req, res) => {
   // const result = res.send({ message: "Data Added to Server" });
 
   const result = await packages.insertOne(newPackage);
+  // console.log(result)
   res.send(result);
 });
 
 
-//http://localhost:5000/add-package
+//http://localhost:5000/packages
 //get packages from database
-app.get("/add-package", async (req, res) => {
+app.get("/packages", async (req, res) => {
   const cursor = packages.find({});
   const allPackages = await cursor.toArray();
   res.send(allPackages);
