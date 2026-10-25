@@ -1,30 +1,29 @@
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
 
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { cn } from "@/lib/utils";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Toaster } from "react-hot-toast";
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { cn } from "@/lib/utils"
+import { Navbar } from "@/components/Navbar"
+import { Footer } from "@/components/Footer"
+import { Toaster } from "react-hot-toast"
 
 export const metadata: Metadata = {
   title: "Wanderlast",
   description: "Explore destinations with Wanderlast",
-};
+}
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-});
+})
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html
@@ -44,5 +43,5 @@ export default function RootLayout({
         <Footer />
       </body>
     </html>
-  );
+  )
 }

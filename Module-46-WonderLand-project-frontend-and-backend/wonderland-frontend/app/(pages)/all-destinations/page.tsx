@@ -15,7 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import toast from "react-hot-toast"
 
 type Destination = {
   _id: string
@@ -60,7 +59,7 @@ function DestinationCard({ item }: { item: Destination }) {
     <Card className="gap-0 py-0">
       <div className="relative aspect-3/2 w-full overflow-hidden">
         {imageFailed || !item.imageUrl ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-cyan-50 to-teal-50 text-muted-foreground">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-linear-to-br from-cyan-50 to-teal-50 text-muted-foreground">
             <ImageOff className="size-8" />
             <span className="text-xs">Image unavailable</span>
           </div>
@@ -96,14 +95,13 @@ function DestinationCard({ item }: { item: Destination }) {
 
         <p className="text-xs text-muted-foreground">{item.duration}</p>
 
-        <button
-          type="button"
-          onClick={() => toast(`Booking for ${destination} is coming soon!`)}
+        <Link
+          href={`/all-destinations/${item._id}`}
           className="mt-1 flex items-center gap-1 self-start text-xs font-semibold tracking-wide text-blue-600 uppercase transition-colors hover:text-blue-700"
         >
           Book Now
           <ArrowUpRight className="size-3.5" />
-        </button>
+        </Link>
       </CardContent>
     </Card>
   )
@@ -288,7 +286,8 @@ export default function AllDestinationsPage() {
             <code className="rounded bg-muted px-1.5 py-0.5">
               node index.js
             </code>{" "}
-            in <code className="rounded bg-muted px-1.5 py-0.5">
+            in{" "}
+            <code className="rounded bg-muted px-1.5 py-0.5">
               ../wonderland-backend
             </code>{" "}
             (port 5000), then try again.

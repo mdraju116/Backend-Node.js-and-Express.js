@@ -17,20 +17,26 @@ No tests.
 
 The API lives in `../wonderland-backend` — Express 5 + MongoDB, run with `node index.js`
 from that folder (port 5000, CORS locked to `http://localhost:3000`, needs its `.env`
-with `MONGODB_URI`). Endpoints: `POST /add-package`, `GET /packages`.
-This frontend hardcodes `http://localhost:5000` in `app/(pages)/add-destination/page.tsx`
-(no env-based API base). The backend must be running for that form to succeed.
+with `MONGODB_URI`). Endpoints: `POST /add-package`, `GET /packages`,
+`GET /packages/:id` (invalid ids can throw in the route handler).
+This frontend hardcodes `http://localhost:5000` in its fetch calls
+(no env-based API base). The backend must be running for data pages to work.
 
 ## Structure
 
 - `app/layout.tsx` — Geist/Geist_Mono via `next/font/google`, `cn` on `<html>`, renders
   `Navbar` → `ThemeProvider` → `Toaster` (react-hot-toast) → `Footer`.
   `app/page.tsx` — home page composing `Banner`/`WhyChooseUs`/`Testimonials`/`CTA`.
-- `app/(pages)/` — route group: `add-destination` (client form posting to the backend),
-  `all-destinations` (empty stub, not built yet).
+- `app/(pages)/` — route group: `all-destinations` (client list page: fetches
+  `GET /packages`, filters/sort, card grid) with `[destid]/page.tsx` (server component
+  fetching `GET /packages/:id`; interactive bits in colocated client components
+  `booking-card.tsx` / `destination-actions.tsx`), plus `add-destination` (client form).
 - `app/globals.css` — all Tailwind v4 / theme config lives here (no `tailwind.config`).
 - `components/` — site sections (Navbar, Footer, Banner, CTA, Testimonials, WhyChooseUs).
 - `components/ui/` — shadcn components only; add with `npx shadcn@latest add <name>`.
+- `components/remote-image.tsx` — use for user-entered image URLs: `next/image` with an
+  error fallback (many `imageUrl` values point at image-host *pages*, not files;
+  `next.config.ts` allows any remote host via `images.remotePatterns`).
 - `components/theme-provider.tsx` — next-themes wrapper (press `d` to toggle dark mode;
   ignored while typing in inputs).
 - `lib/utils.ts` — the `cn` helper; `hooks/` — empty placeholder (just `.gitkeep`).

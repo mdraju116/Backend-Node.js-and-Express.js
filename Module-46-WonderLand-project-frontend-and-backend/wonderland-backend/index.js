@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 const app = express();
 const port = process.env.port || 5000;
+import { MongoClient, ObjectId } from "mongodb";
 
 app.use(express.json());
 app.use(
@@ -11,7 +12,6 @@ app.use(
   }),
 );
 
-import { MongoClient } from "mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -48,13 +48,24 @@ app.post("/add-package", async (req, res) => {
 });
 
 
-//http://localhost:5000/packages
-//get packages from database
+
+//get packages from database => http://localhost:5000/packages
 app.get("/packages", async (req, res) => {
   const cursor = packages.find({});
   const allPackages = await cursor.toArray();
   res.send(allPackages);
 });
+
+//get single user details by id => http://localhost:5000/packages/id
+ app.get("/packages/:id",async(req,res)=>{
+    console.log("userId:",req.params);
+    const id = req.params.id;
+
+    const query = {_id: new ObjectId(id)}
+    const result = await packages.findOne(query);
+    res.send(result);
+
+    })
 
 
 app.listen(port, () => {
