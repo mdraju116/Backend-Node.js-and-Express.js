@@ -11,8 +11,8 @@ const leftLinks = [
 
 const rightLinks = [
   { label: "Profile", href: "/profile", icon: UserRound },
-  { label: "Login", href: "/login" },
-  { label: "Sign Up", href: "/signup" },
+  { label: "Login", href: "/sign-in" },
+  { label: "Sign Up", href: "/sign-up" },
 ]
 
 export function Navbar() {
