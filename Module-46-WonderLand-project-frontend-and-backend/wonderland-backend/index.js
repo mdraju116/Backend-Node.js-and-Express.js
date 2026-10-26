@@ -1,18 +1,25 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-const app = express();
-const port = process.env.port || 5000;
 import { MongoClient, ObjectId } from "mongodb";
 
+const app = express();
+const port = process.env.port || 5000;
 app.use(express.json());
+
+//to connect frontend with server
 app.use(
   cors({
     origin: "http://localhost:3000",
   }),
 );
 
+//server home-page => http://localhost:5000/
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
+// connect to database
 const client = new MongoClient(process.env.MONGODB_URI);
 
 export async function connectToMongoDB() {
@@ -24,19 +31,17 @@ export async function connectToMongoDB() {
     console.dir(err);
   }
 }
+
 //connect databse-user(cluster) with database-table(db & collection)
 const connectedClient = await connectToMongoDB();
 
 const database = connectedClient.db("wonderland-db"); //actual database name from mongodb
 const packages = database.collection("packages"); //actual collection name from mongodb
 
-// http://localhost:5000/
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
+//CRUD-operations
 
-//send packages to database
+//1.send packages to database => http://localhost:5000/add-package
 app.post("/add-package", async (req, res) => {
   const newPackage = req.body;
   console.log("data from client:", newPackage);
@@ -47,26 +52,43 @@ app.post("/add-package", async (req, res) => {
   res.send(result);
 });
 
-
-
-//get packages from database => http://localhost:5000/packages
+//2a.get all packages from database => http://localhost:5000/packages
 app.get("/packages", async (req, res) => {
   const cursor = packages.find({});
   const allPackages = await cursor.toArray();
   res.send(allPackages);
 });
 
-//get single user details by id => http://localhost:5000/packages/id
- app.get("/packages/:id",async(req,res)=>{
-    console.log("userId:",req.params);
-    const id = req.params.id;
+//2b.get single package details by id => http://localhost:5000/packages/id
+app.get("/packages/:id", async (req, res) => {
+  console.log("userId:", req.params);
+  const id = req.params.id;
 
-    const query = {_id: new ObjectId(id)}
-    const result = await packages.findOne(query);
-    res.send(result);
+  const query = { _id: new ObjectId(id) };
+  const result = await packages.findOne(query);
+  res.send(result);
+});
 
-    })
+//3.Update single package by id =>http://localhost:5000/packages/id
+app.patch("/packages/:id", async (req, res) => {
+  const id = req.params.id;
+  const updatedPackage = req.body;
+  console.log("Updating package:", id, updatedPackage);
 
+  const filter = { _id: new ObjectId(id) };
+  const updateDoc = { $set: updatedPackage};
+
+  const result = await packages.updateOne(filter, updateDoc);
+  res.send(result);
+});
+
+//4.Delete  single-package by id => http://localhost:5000/packages/id
+app.delete("/packages/:id",async(req,res)=>{
+  const id =req.params.id;
+  const query = {_id:new ObjectId(id)}
+  const result= await packages.deleteOne(query);
+  res.send(result);
+})
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

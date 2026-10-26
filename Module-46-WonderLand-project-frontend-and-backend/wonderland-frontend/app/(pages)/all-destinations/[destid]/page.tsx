@@ -84,7 +84,7 @@ const DestinationDetailsPage = async ({
           <ArrowLeft className="size-4" />
           Back to Destinations
         </Link>
-        <DestinationActions />
+        <DestinationActions destination={destination} />
       </div>
 
       <div className="relative aspect-3/2 w-full overflow-hidden rounded-xl md:aspect-12/5">
