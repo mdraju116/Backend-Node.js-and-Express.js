@@ -1,12 +1,9 @@
 "use client"
 
-import Link from "next/link"
-import { X } from "lucide-react"
-
-import { buttonVariants } from "@/components/ui/button"
 import UpdateDestination, {
   type Destination,
 } from "@/components/UpdateDestination"
+import DeleteDestination from "@/components/DeleteDestination"
 
 export function DestinationActions({
   destination,
@@ -16,13 +13,7 @@ export function DestinationActions({
   return (
     <div className="flex items-center gap-2">
       <UpdateDestination destination={destination} />
-      <Link
-        href="/all-destinations"
-        className={buttonVariants({ variant: "destructive" })}
-      >
-        <X />
-        Cancel
-      </Link>
+      <DeleteDestination destination={destination} />
     </div>
   )
 }

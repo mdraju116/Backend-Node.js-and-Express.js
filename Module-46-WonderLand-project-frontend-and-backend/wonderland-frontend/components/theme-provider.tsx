@@ -47,7 +47,9 @@ function ThemeHotkey() {
         return
       }
 
-      if (event.key.toLowerCase() !== "d") {
+      // Some synthesized key events (e.g. from browser extensions or IMEs)
+      // don't carry a key value — ignore those instead of crashing
+      if (event.key?.toLowerCase() !== "d") {
         return
       }
 
