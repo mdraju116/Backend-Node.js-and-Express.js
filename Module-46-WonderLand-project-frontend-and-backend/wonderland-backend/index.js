@@ -31,12 +31,13 @@ export async function connectToMongoDB() {
     console.dir(err);
   }
 }
-
-//connect databse-user(cluster) with database-table(db & collection)
 const connectedClient = await connectToMongoDB();
 
-const database = connectedClient.db("wonderland-db"); //actual database name from mongodb
-const packages = database.collection("packages"); //actual collection name from mongodb
+// create database & collection (will auto create at mongodb => Browse collections)
+const database = connectedClient.db("wonderland-db"); 
+const packages = database.collection("packages"); 
+
+const bookingCollections =database.collection("bookings");
 
 
 //CRUD-operations
@@ -87,6 +88,14 @@ app.delete("/packages/:id",async(req,res)=>{
   const id =req.params.id;
   const query = {_id:new ObjectId(id)}
   const result= await packages.deleteOne(query);
+  res.send(result);
+})
+
+
+// http://localhost:5000/bookings
+app.post("/bookings",async(req,res)=>{
+  const data = req.body;
+  const result = await bookingCollections.insertOne(data);
   res.send(result);
 })
 

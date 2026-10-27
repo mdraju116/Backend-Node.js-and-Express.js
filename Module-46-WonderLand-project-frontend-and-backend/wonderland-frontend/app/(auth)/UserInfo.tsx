@@ -12,6 +12,7 @@ import { ChevronDown, LogOut, User, UserRound } from "lucide-react"
 
 const UserInfo = () => {
   const { data: session, isPending } = useSession()
+  const user = session?.user
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
 
@@ -66,7 +67,7 @@ const UserInfo = () => {
     )
   }
 
-  const user = session?.user
+
 
   return (
     <div className="relative" ref={dropdownRef}>

@@ -1,14 +1,15 @@
 "use client"
 
-import UpdateDestination, {
-  type Destination,
-} from "@/components/UpdateDestination"
+import UpdateDestination from "@/components/UpdateDestination"
 import DeleteDestination from "@/components/DeleteDestination"
+import { type DestinationType } from "@/app/(pages)/all-destinations/[destid]/page"
+
+
 
 export function DestinationActions({
   destination,
 }: {
-  destination: Destination
+  destination: DestinationType
 }) {
   return (
     <div className="flex items-center gap-2">

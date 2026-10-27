@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import toast from "react-hot-toast"
+import { type Destination } from "@/app/(pages)/all-destinations/[destid]/page"
 
 const categories = [
   "Beach",
@@ -35,18 +36,6 @@ const categories = [
   "Luxury",
   "Wildlife",
 ]
-
-export type Destination = {
-  _id: string
-  destination: string
-  country: string
-  category: string
-  price: string
-  duration: string
-  departureDate: string
-  imageUrl: string
-  description: string
-}
 
 type PackageForm = Omit<Destination, "_id">
 

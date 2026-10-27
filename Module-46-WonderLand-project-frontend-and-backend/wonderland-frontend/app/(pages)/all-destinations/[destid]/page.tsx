@@ -4,10 +4,10 @@ import { ArrowLeft, Check, Clock, MapPin, Star } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { RemoteImage } from "@/components/remote-image"
 
-import { BookingCard } from "./booking-card"
+import { BookingCard } from "@/components/BookingCard"
 import { DestinationActions } from "./destination-actions"
-
-type Destination = {
+ 
+ export type DestinationType = {
   _id: string
   destination: string
   country: string
@@ -21,12 +21,12 @@ type Destination = {
 
 const API_URL = "http://localhost:5000/packages"
 
-async function fetchDestination(destid: string): Promise<Destination | null> {
+async function fetchDestination(destid: string): Promise<DestinationType | null> {
   try {
     const response = await fetch(`${API_URL}/${destid}`)
     if (!response.ok) return null
     const data: unknown = await response.json()
-    return data && typeof data === "object" ? (data as Destination) : null
+    return data && typeof data === "object" ? (data as DestinationType) : null
   } catch (error) {
     console.error("Failed to load destination:", error)
     return null
@@ -146,9 +146,7 @@ const DestinationDetailsPage = async ({
         </div>
 
         <BookingCard
-          destinationName={name}
-          price={destination.price}
-          departureDate={destination.departureDate}
+         destination={destination}
         />
       </div>
     </main>
