@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { UserRound } from "lucide-react"
+// import { UserRound } from "lucide-react"
+import UserInfo from "@/app/(auth)/UserInfo"
 
 const leftLinks = [
   { label: "Home", href: "/", active: true },
@@ -9,11 +10,11 @@ const leftLinks = [
   { label: "Admin", href: "/admin" },
 ]
 
-const rightLinks = [
-  { label: "Profile", href: "/profile", icon: UserRound },
-  { label: "Login", href: "/sign-in" },
-  { label: "Sign Up", href: "/sign-up" },
-]
+// const rightLinks = [
+//   { label: "Profile", href: "/profile", icon: UserRound },
+//   { label: "Login", href: "/sign-in" },
+//   { label: "Sign Up", href: "/sign-up" },
+// ]
 
 export function Navbar() {
   return (
@@ -43,7 +44,8 @@ export function Navbar() {
           Wanderlast
         </Link>
 
-        <ul className="flex items-center gap-4 text-sm">
+        <UserInfo />
+        {/* <ul className="flex items-center gap-4 text-sm">
           {rightLinks.map((link) => {
             const Icon = "icon" in link ? link.icon : null
             return (
@@ -60,7 +62,7 @@ export function Navbar() {
               </li>
             )
           })}
-        </ul>
+        </ul> */}
       </nav>
     </header>
   )

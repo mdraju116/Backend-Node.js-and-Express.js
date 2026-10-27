@@ -34,6 +34,7 @@ import { signUp } from "@/lib/auth-client"
 
 type SignUpValues = {
   name: string
+  image: string
   email: string
   password: string
   confirmPassword: string
@@ -45,6 +46,7 @@ const EMAIL_PATTERN = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
 
 const initialValues: SignUpValues = {
   name: "",
+  image: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -53,6 +55,21 @@ const initialValues: SignUpValues = {
 function validateName(name: string) {
   if (!name.trim()) return "Name is required"
   if (name.trim().length < 3) return "Name must be at least 3 characters"
+  return undefined
+}
+
+function validateImage(image: string) {
+  const trimmed = image.trim()
+  if (!trimmed) return undefined // optional
+  let parsed: URL
+  try {
+    parsed = new URL(trimmed)
+  } catch {
+    return "Please enter a valid URL (https://...)"
+  }
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    return "URL must start with http:// or https://"
+  }
   return undefined
 }
 
@@ -104,6 +121,7 @@ const SignUpPage = () => {
 
     const nextErrors: SignUpErrors = {
       name: validateName(values.name),
+      image: validateImage(values.image),
       email: validateEmail(values.email),
       password: validatePassword(values.password),
       confirmPassword: validateConfirmPassword(
@@ -121,6 +139,7 @@ const SignUpPage = () => {
     try {
       const { error } = await signUp.email({
         name: values.name.trim(),
+        image: values.image.trim() || undefined,
         email: values.email.trim(),
         password: values.password,
       })
@@ -149,8 +168,7 @@ const SignUpPage = () => {
             Create your account
           </CardTitle>
           <CardDescription>
-            Sign up for free to see detailed prices, compare packages and manage
-            your bookings.
+            Sign up for free to see detailed Pages.
           </CardDescription>
         </CardHeader>
 
@@ -171,6 +189,25 @@ const SignUpPage = () => {
                   aria-invalid={!!errors.name}
                 />
                 <FieldError>{errors.name}</FieldError>
+              </Field>
+
+              {/* Image URL (optional) */}
+              <Field data-invalid={!!errors.image}>
+                <FieldLabel htmlFor="image">Photo URL</FieldLabel>
+                <Input
+                  id="image"
+                  name="image"
+                  type="url"
+                  autoComplete="url"
+                  placeholder="https://example.com/your-photo.jpg"
+                  value={values.image}
+                  onChange={handleChange}
+                  aria-invalid={!!errors.image}
+                />
+                <FieldDescription>
+                  Optional — a link to your profile picture.
+                </FieldDescription>
+                <FieldError>{errors.image}</FieldError>
               </Field>
 
               {/* Email */}
