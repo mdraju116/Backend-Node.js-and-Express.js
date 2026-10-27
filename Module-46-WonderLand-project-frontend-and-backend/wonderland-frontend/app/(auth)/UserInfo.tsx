@@ -67,8 +67,6 @@ const UserInfo = () => {
     )
   }
 
-
-
   return (
     <div className="relative" ref={dropdownRef}>
       {user ? (

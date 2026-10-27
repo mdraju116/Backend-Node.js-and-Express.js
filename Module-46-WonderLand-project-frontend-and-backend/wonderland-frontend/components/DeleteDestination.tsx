@@ -18,10 +18,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { type Destination } from "./UpdateDestination"
+import { type DestinationType } from "@/app/(pages)/all-destinations/[destid]/page"
 
 type DeleteDestinationProps = {
-  destination: Destination
+  destination: DestinationType
 }
 
 export default function DeleteDestination({

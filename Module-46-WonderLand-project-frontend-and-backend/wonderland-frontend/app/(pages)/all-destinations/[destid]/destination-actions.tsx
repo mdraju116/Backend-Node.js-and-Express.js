@@ -4,8 +4,6 @@ import UpdateDestination from "@/components/UpdateDestination"
 import DeleteDestination from "@/components/DeleteDestination"
 import { type DestinationType } from "@/app/(pages)/all-destinations/[destid]/page"
 
-
-
 export function DestinationActions({
   destination,
 }: {

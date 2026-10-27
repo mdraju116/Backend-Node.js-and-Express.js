@@ -6,8 +6,8 @@ import { RemoteImage } from "@/components/remote-image"
 
 import { BookingCard } from "@/components/BookingCard"
 import { DestinationActions } from "./destination-actions"
- 
- export type DestinationType = {
+
+export type DestinationType = {
   _id: string
   destination: string
   country: string
@@ -21,7 +21,9 @@ import { DestinationActions } from "./destination-actions"
 
 const API_URL = "http://localhost:5000/packages"
 
-async function fetchDestination(destid: string): Promise<DestinationType | null> {
+async function fetchDestination(
+  destid: string
+): Promise<DestinationType | null> {
   try {
     const response = await fetch(`${API_URL}/${destid}`)
     if (!response.ok) return null
@@ -145,9 +147,7 @@ const DestinationDetailsPage = async ({
           )}
         </div>
 
-        <BookingCard
-         destination={destination}
-        />
+        <BookingCard destination={destination} />
       </div>
     </main>
   )

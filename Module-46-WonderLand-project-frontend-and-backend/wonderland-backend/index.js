@@ -70,7 +70,7 @@ app.get("/packages/:id", async (req, res) => {
   res.send(result);
 });
 
-//3.Update single package by id =>http://localhost:5000/packages/id
+//3.Update single package by id =>http://localhost:5000/packages/{id}
 app.patch("/packages/:id", async (req, res) => {
   const id = req.params.id;
   const updatedPackage = req.body;
@@ -83,7 +83,7 @@ app.patch("/packages/:id", async (req, res) => {
   res.send(result);
 });
 
-//4.Delete  single-package by id => http://localhost:5000/packages/id
+//4.Delete  single-package by id => http://localhost:5000/packages/{id}
 app.delete("/packages/:id",async(req,res)=>{
   const id =req.params.id;
   const query = {_id:new ObjectId(id)}
@@ -96,6 +96,21 @@ app.delete("/packages/:id",async(req,res)=>{
 app.post("/bookings",async(req,res)=>{
   const data = req.body;
   const result = await bookingCollections.insertOne(data);
+  res.send(result);
+})
+
+// http://localhost:5000/bookings/{email}
+app.get("/bookings/:email",async(req,res)=>{
+  const userEmail= req.params.email;
+  const result = await bookingCollections.find({email:userEmail}).toArray();
+  res.send(result);
+})
+
+//http://localhost:5000/my-bookings/{id}
+app.delete("/my-bookings/:id", async(req,res)=>{
+  const id = req.params.id;
+  const query = {_id:new ObjectId(id)};
+  const result = await bookingCollections.deleteOne(query);
   res.send(result);
 })
 

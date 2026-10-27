@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import toast from "react-hot-toast"
-import { type Destination } from "@/app/(pages)/all-destinations/[destid]/page"
+import { type DestinationType } from "@/app/(pages)/all-destinations/[destid]/page"
 
 const categories = [
   "Beach",
@@ -37,9 +37,9 @@ const categories = [
   "Wildlife",
 ]
 
-type PackageForm = Omit<Destination, "_id">
+type PackageForm = Omit<DestinationType, "_id">
 
-const toFormValues = (destination: Destination): PackageForm => ({
+const toFormValues = (destination: DestinationType): PackageForm => ({
   destination: destination.destination,
   country: destination.country,
   category: destination.category,
@@ -51,7 +51,7 @@ const toFormValues = (destination: Destination): PackageForm => ({
 })
 
 type UpdateDestinationProps = {
-  destination: Destination
+  destination: DestinationType
 }
 
 export default function UpdateDestination({
