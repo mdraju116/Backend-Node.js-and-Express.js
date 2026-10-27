@@ -1,4 +1,8 @@
+"use client"
+
+import * as React from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   CalendarDays,
   CheckCircle2,
@@ -7,7 +11,20 @@ import {
   Hash,
   Trash2,
 } from "lucide-react"
+import toast from "react-hot-toast"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { RemoteImage } from "@/components/remote-image"
@@ -49,6 +66,10 @@ const statusConfig = {
 } as const
 
 const MyBookingCard = ({ booking }: { booking: BookingType }) => {
+  const router = useRouter()
+  const [open, setOpen] = React.useState(false)
+  const [cancelling, setCancelling] = React.useState(false)
+
   const status = statusConfig[booking.status ?? "confirmed"]
   const StatusIcon = status.icon
 
@@ -59,6 +80,35 @@ const MyBookingCard = ({ booking }: { booking: BookingType }) => {
   // New bookings store the package id in `packageId`; older bookings used the
   // package id as their own `_id`, so fall back to it for those.
   const destinationHref = `/all-destinations/${booking.packageId ?? booking._id}`
+
+  const handleCancel = async () => {
+    setCancelling(true)
+    try {
+      const res = await fetch(
+        `http://localhost:5000/my-bookings/${booking._id}`,
+        {
+          method: "DELETE",
+        }
+      )
+
+      if (!res.ok) {
+        throw new Error(`Request failed with status ${res.status}`)
+      }
+
+      const result: unknown = await res.json()
+      console.log("Response from backend", result)
+
+      toast.success("Booking cancelled successfully!")
+      setOpen(false)
+      // Re-fetch the server component so the list drops the deleted booking
+      router.refresh()
+    } catch (error) {
+      toast.error("Failed to cancel booking!")
+      console.error(error)
+    } finally {
+      setCancelling(false)
+    }
+  }
 
   return (
     <article className="flex flex-col gap-4 rounded-xl border bg-card p-4 shadow-sm sm:flex-row sm:gap-5">
@@ -94,15 +144,51 @@ const MyBookingCard = ({ booking }: { booking: BookingType }) => {
           <p className="text-2xl font-bold text-[#0e9aa7]">{price}</p>
 
           <div className="flex items-center gap-2">
-            {/* TODO(next session): wire up cancel/delete */}
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-red-200 text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:border-red-900 dark:hover:bg-red-500/10"
+            <AlertDialog
+              open={open}
+              onOpenChange={(nextOpen) => setOpen(nextOpen)}
             >
-              <Trash2 />
-              Cancel
-            </Button>
+              <AlertDialogTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-red-200 text-red-500 hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:border-red-900 dark:hover:bg-red-500/10"
+                  />
+                }
+              >
+                <Trash2 />
+                Cancel
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogMedia className="bg-destructive/10 text-destructive">
+                    <Trash2 />
+                  </AlertDialogMedia>
+                  <AlertDialogTitle>Cancel this booking?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will permanently remove your booking for{" "}
+                    <span className="font-medium text-foreground">
+                      {booking.destination}
+                    </span>
+                    . This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={cancelling}>
+                    Keep Booking
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    variant="destructive"
+                    onClick={handleCancel}
+                    disabled={cancelling}
+                  >
+                    {cancelling ? "Cancelling..." : "Yes, Cancel Booking"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
             <Link
               href={destinationHref}
               className={buttonVariants({
