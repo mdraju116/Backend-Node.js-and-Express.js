@@ -55,11 +55,18 @@ const MyBookingsPage = async () => {
   let bookings: BookingType[] = []
   let fetchFailed = false
 
+  //accessing jwt token
+  const jwtToken= await auth.api.getToken({
+    headers : await headers(),
+  })
+  console.log(jwtToken?.token);
+
   try {
     const res = await fetch(
       `${API_URL}/my-bookings/${encodeURIComponent(user.email)}`,{
-            headers:{
-              authorization : "user logged in"
+        // send the jwt token to server
+        headers:{
+              authorization : jwtToken?.token
             }
           }
     )
