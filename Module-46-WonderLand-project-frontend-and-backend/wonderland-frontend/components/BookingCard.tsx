@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { usePathname, useRouter } from "next/navigation"
 import { ArrowRight, Check } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,8 @@ export function BookingCard({ destination }: { destination: DestinationType }) {
 
   const { data: session } = useSession()
   const user = session?.user
+  const router = useRouter()
+  const pathname = usePathname()
 
   const handleBookNow = async (
     event: React.FormEvent<HTMLFormElement>
@@ -37,7 +40,11 @@ export function BookingCard({ destination }: { destination: DestinationType }) {
     if (submitting) return
 
     if (!user?.email) {
-      toast.error("Please log in before booking a trip.")
+      const signInUrl = new URLSearchParams({
+        message: "booking-required",
+        callbackURL: pathname,
+      })
+      router.push(`/sign-in?${signInUrl.toString()}`)
       return
     }
 

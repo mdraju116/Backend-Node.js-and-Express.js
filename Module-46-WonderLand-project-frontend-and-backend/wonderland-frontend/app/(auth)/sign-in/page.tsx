@@ -53,6 +53,11 @@ function validatePassword(password: string) {
 const SignInForm = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const requestedCallback = searchParams.get("callbackURL")
+  const callbackURL =
+    requestedCallback?.startsWith("/") && !requestedCallback.startsWith("//")
+      ? requestedCallback
+      : "/"
 
   const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
@@ -63,7 +68,14 @@ const SignInForm = () => {
 
   // Show a hint when the user was redirected here from a protected page
   React.useEffect(() => {
-    if (searchParams.get("message") === "login-required") {
+    const message = searchParams.get("message")
+
+    if (message === "booking-required") {
+      toast("Please sign in to book this information", {
+        id: "booking-required",
+        icon: "🔐",
+      })
+    } else if (message === "login-required") {
       toast("Please sign in to view this information.", {
         id: "login-required",
         icon: "🔐",
@@ -92,7 +104,7 @@ const SignInForm = () => {
         email: email.trim(),
         password,
         rememberMe,
-        callbackURL: "/",
+        callbackURL,
       })
 
       if (error) {
@@ -102,7 +114,7 @@ const SignInForm = () => {
       }
 
       toast.success("Signed in successfully!")
-      router.push("/")
+      router.push(callbackURL)
       router.refresh()
     } catch (error) {
       console.error("Sign-in error:", error)

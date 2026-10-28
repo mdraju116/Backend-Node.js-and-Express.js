@@ -143,7 +143,19 @@ export default function AllDestinationsPage() {
           throw new Error(`Request failed with status ${res.status}`)
         }
         const data: unknown = await res.json()
-        setDestinations(Array.isArray(data) ? (data as Destination[]) : [])
+        if (Array.isArray(data)) {
+          const uniqueDestinations = new Map<string, Destination>()
+
+          for (const item of data as Destination[]) {
+            if (!uniqueDestinations.has(item._id)) {
+              uniqueDestinations.set(item._id, item)
+            }
+          }
+
+          setDestinations([...uniqueDestinations.values()])
+        } else {
+          setDestinations([])
+        }
       } catch (error) {
         if (controller.signal.aborted) return
         console.error("Failed to load destinations:", error)
