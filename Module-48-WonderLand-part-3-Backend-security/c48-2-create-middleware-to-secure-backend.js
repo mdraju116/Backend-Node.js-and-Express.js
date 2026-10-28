@@ -26,7 +26,7 @@ http://localhost:5000/my-bookings/mdraj.9700@gmail.com
 
 
 
- Middleware creating steps :
+➡️➡️ Middleware creating steps :
 
 ✅✅Step-1 : add headers inside the fecth at frontend pages where you used the backend api (my-bookings/page.tsx)
 
@@ -41,6 +41,7 @@ http://localhost:5000/my-bookings/mdraj.9700@gmail.com
 
 ✅✅Step-2 :create middleware using the header at backend - index.js
     
+    //reusable function
     const verifyApi =(req,res,next)=>{
         const authHeader = req.headers.authorization;
         console.log(authHeader);
@@ -55,7 +56,7 @@ http://localhost:5000/my-bookings/mdraj.9700@gmail.com
 
     }
 
-✅✅Step-3 : use the middleware in api
+✅✅Step-3 : use the middleware in api (get)
 
     //see my-bookings: http://localhost:5000/bookings/{email}
         app.get("/my-bookings/:email",verifyApi,async(req,res)=>{

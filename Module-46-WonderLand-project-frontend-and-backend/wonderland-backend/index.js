@@ -15,7 +15,7 @@ app.use(
 );
 
 
-//middleware
+//middleware - reusable function
 const verifyApi =(req,res,next)=>{
   const authHeader = req.headers.authorization;
   console.log(authHeader);
@@ -35,6 +35,7 @@ const verifyApi =(req,res,next)=>{
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
 
 // connect to database
 const client = new MongoClient(process.env.MONGODB_URI);
