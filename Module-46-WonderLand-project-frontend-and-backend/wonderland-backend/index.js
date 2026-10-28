@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { MongoClient, ObjectId } from "mongodb";
+import { jwtVerify, createRemoteJWKSet } from 'jose'
+
 
 const app = express();
 const port = process.env.port || 5000;
@@ -15,20 +17,44 @@ app.use(
 );
 
 
-//middleware - reusable function
-const verifyApi =(req,res,next)=>{
-  const authHeader = req.headers.authorization;
-  console.log(authHeader);
+//middleware - reusable function -c48-2 (very simple process-easy to hack)
 
-  if(authHeader !== "user logged in"){
-    return res.status(401).send({msg:"Unauthorized"});
+// const verifyApi =(req,res,next)=>{
+//   const authHeader = req.headers.authorization;
+//   console.log(authHeader);
+
+//   if(authHeader !== "user logged in"){
+//     return res.status(401).send({msg:"Unauthorized"});
+//   }
+
+//   console.log("I am middleware");
+
+//   next();
+
+// }
+
+
+//verify jwt token - c48-6
+const verifyToken = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader.split(" ")[1];
+
+    console.log(token);
+    const JWKS = createRemoteJWKSet(
+      new URL('http://localhost:3000/api/auth/jwks')
+    )
+    const { payload } = await jwtVerify(token, JWKS);
+    next();
+    return payload
+  } catch (error) {
+    console.error('Token validation failed:', error)
+    throw error
   }
 
-  console.log("I am middleware");
-
-  next();
-
 }
+
+
 
 
 //server home-page => http://localhost:5000/
@@ -52,10 +78,10 @@ export async function connectToMongoDB() {
 const connectedClient = await connectToMongoDB();
 
 // create database & collection (will auto create at mongodb => Browse collections)
-const database = connectedClient.db("wonderland-db"); 
-const packages = database.collection("packages"); 
+const database = connectedClient.db("wonderland-db");
+const packages = database.collection("packages");
 
-const bookingCollections =database.collection("bookings");
+const bookingCollections = database.collection("bookings");
 
 
 //CRUD-operations
@@ -95,39 +121,40 @@ app.patch("/packages/:id", async (req, res) => {
   console.log("Updating package:", id, updatedPackage);
 
   const filter = { _id: new ObjectId(id) };
-  const updateDoc = { $set: updatedPackage};
+  const updateDoc = { $set: updatedPackage };
 
   const result = await packages.updateOne(filter, updateDoc);
   res.send(result);
 });
 
 //4.Delete  single-package by id => http://localhost:5000/packages/{id}
-app.delete("/packages/:id",async(req,res)=>{
-  const id =req.params.id;
-  const query = {_id:new ObjectId(id)}
-  const result= await packages.deleteOne(query);
+app.delete("/packages/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) }
+  const result = await packages.deleteOne(query);
   res.send(result);
 })
 
 
 // http://localhost:5000/bookings
-app.post("/bookings",async(req,res)=>{
+app.post("/bookings", async (req, res) => {
   const data = req.body;
   const result = await bookingCollections.insertOne(data);
   res.send(result);
 })
 
+//used jwt token
 //see my-bookings: http://localhost:5000/my-bookings/{email}
-app.get("/my-bookings/:email",verifyApi,async(req,res)=>{
-  const userEmail= req.params.email;
-  const result = await bookingCollections.find({email:userEmail}).toArray();
+app.get("/my-bookings/:email", verifyToken, async (req, res) => {
+  const userEmail = req.params.email;
+  const result = await bookingCollections.find({ email: userEmail }).toArray();
   res.send(result);
 })
 
 //delete my-bookings: http://localhost:5000/my-bookings/{id}
-app.delete("/my-bookings/:id", async(req,res)=>{
+app.delete("/my-bookings/:id", async (req, res) => {
   const id = req.params.id;
-  const query = {_id:new ObjectId(id)};
+  const query = { _id: new ObjectId(id) };
   const result = await bookingCollections.deleteOne(query);
   res.send(result);
 })

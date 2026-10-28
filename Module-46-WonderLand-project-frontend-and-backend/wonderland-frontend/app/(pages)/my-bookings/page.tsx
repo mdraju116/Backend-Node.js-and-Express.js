@@ -66,7 +66,7 @@ const MyBookingsPage = async () => {
       `${API_URL}/my-bookings/${encodeURIComponent(user.email)}`,{
         // send the jwt token to server
         headers:{
-              authorization : jwtToken?.token
+              authorization : `Bearer ${jwtToken?.token}`
             }
           }
     )

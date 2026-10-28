@@ -1,5 +1,5 @@
 /* 
-Accessing Token from Server Component and Sending Token to Backend
+Access JWT Token at frontend and Send to Backend
 
 ⚠️NB: The jwt token will be generated each time after a successful user Login
 and will be validate for 1/3/7.. days as the maxAge.
@@ -57,7 +57,7 @@ iIxIiwiaWF0IjoxNzkzMjAzNTY4LCJleHAiOjE3OTM4MDgzNjh9.Wap2F1m5V_3DCij0kCDXtoi1YaSe
       `http://localhost:5000/my-bookings/${user.email}`,{
             
         headers:{
-              authorization : jwtToken?.token
+              authorization : `Bearer ${jwtToken?.token}`
             }
           }
     )
