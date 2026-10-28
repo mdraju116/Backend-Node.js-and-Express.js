@@ -40,6 +40,7 @@ export function SocialSignInButtons() {
       const { error } = await signIn.social({
         provider,
         callbackURL: "/",
+        errorCallbackURL: "/sign-in",
       })
 
       if (error) {

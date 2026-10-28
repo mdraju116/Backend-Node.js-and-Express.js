@@ -69,6 +69,7 @@ const SignInForm = () => {
   // Show a hint when the user was redirected here from a protected page
   React.useEffect(() => {
     const message = searchParams.get("message")
+    const authError = searchParams.get("error")
 
     if (message === "booking-required") {
       toast("Please sign in to book this information", {
@@ -79,6 +80,15 @@ const SignInForm = () => {
       toast("Please sign in to view this information.", {
         id: "login-required",
         icon: "🔐",
+      })
+    } else if (authError === "account_not_linked") {
+      toast.error(
+        "This email already has an account. Sign in with your email and password first.",
+        { id: "account-not-linked" }
+      )
+    } else if (authError) {
+      toast.error("Google sign-in failed. Please try again.", {
+        id: "social-sign-in-failed",
       })
     }
   }, [searchParams])

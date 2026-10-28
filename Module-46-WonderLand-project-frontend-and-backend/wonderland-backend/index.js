@@ -14,6 +14,23 @@ app.use(
   }),
 );
 
+
+//middleware
+const verifyApi =(req,res,next)=>{
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
+
+  if(authHeader !== "user logged in"){
+    return res.status(401).send({msg:"Unauthorized"});
+  }
+
+  console.log("I am middleware");
+
+  next();
+
+}
+
+
 //server home-page => http://localhost:5000/
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -99,14 +116,14 @@ app.post("/bookings",async(req,res)=>{
   res.send(result);
 })
 
-// http://localhost:5000/bookings/{email}
-app.get("/bookings/:email",async(req,res)=>{
+//see my-bookings: http://localhost:5000/my-bookings/{email}
+app.get("/my-bookings/:email",verifyApi,async(req,res)=>{
   const userEmail= req.params.email;
   const result = await bookingCollections.find({email:userEmail}).toArray();
   res.send(result);
 })
 
-//http://localhost:5000/my-bookings/{id}
+//delete my-bookings: http://localhost:5000/my-bookings/{id}
 app.delete("/my-bookings/:id", async(req,res)=>{
   const id = req.params.id;
   const query = {_id:new ObjectId(id)};

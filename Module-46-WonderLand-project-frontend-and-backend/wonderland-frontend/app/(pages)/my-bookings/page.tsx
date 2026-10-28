@@ -57,7 +57,11 @@ const MyBookingsPage = async () => {
 
   try {
     const res = await fetch(
-      `${API_URL}/bookings/${encodeURIComponent(user.email)}`
+      `${API_URL}/my-bookings/${encodeURIComponent(user.email)}`,{
+            headers:{
+              authorization : "user logged in"
+            }
+          }
     )
 
     if (!res.ok) {

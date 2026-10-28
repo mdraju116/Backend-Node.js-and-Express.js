@@ -16,6 +16,9 @@ export const auth = betterAuth({
   account: {
     accountLinking: {
       enabled: true,
+      // Google verifies its email address; allow it to link to an existing
+      // email/password account even if that account has not verified email yet.
+      requireLocalEmailVerified: false,
       trustedProviders: ["google", "github"], // Add providers you trust
     },
   },
