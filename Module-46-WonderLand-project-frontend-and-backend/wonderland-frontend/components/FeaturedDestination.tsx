@@ -32,7 +32,7 @@ type FeaturedPackage = {
   imageUrl: string
 }
 
-const API_URL = "http://localhost:5000/featured-packages"
+const API_URL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/featured-packages`
 
 // The design mock shows a rating badge on every card; the API has no rating field
 const rating = 4.5

@@ -67,7 +67,7 @@ export default function AddDestination() {
       //accessing jwt token for client component
       const jwtToken = await getClientToken() // (@/lib/access-jwt-at-client-component")
 
-      const res = await fetch("http://localhost:5000/add-package", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/add-package`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

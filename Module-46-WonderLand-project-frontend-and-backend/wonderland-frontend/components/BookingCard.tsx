@@ -10,7 +10,7 @@ import toast from "react-hot-toast"
 import { type DestinationType } from "@/app/(pages)/all-destinations/[destid]/page"
 import { useSession } from "@/lib/auth-client"
 
-// Marketing bullets from the design mock — same for every package
+// Marketing bullets from the design mock â€” same for every package
 const includedFeatures = [
   "Free cancellation up to 7 days",
   "Travel insurance included",
@@ -55,7 +55,7 @@ export function BookingCard({ destination }: { destination: DestinationType }) {
 
     setSubmitting(true)
     try {
-      // NOTE: never send `destination._id` as `_id` — MongoDB would reuse the
+      // NOTE: never send `destination._id` as `_id` â€” MongoDB would reuse the
       // package id as the booking id, so booking the same package twice
       // failed with a duplicate-key error. Send it as `packageId` instead
       // and let Mongo generate a unique booking `_id`.
@@ -77,7 +77,7 @@ export function BookingCard({ destination }: { destination: DestinationType }) {
         status: "confirmed",
       }
 
-      const res = await fetch("http://localhost:5000/bookings", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

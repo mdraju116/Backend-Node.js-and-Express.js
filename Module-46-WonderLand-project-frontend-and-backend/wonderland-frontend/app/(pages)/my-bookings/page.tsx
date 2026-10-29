@@ -27,7 +27,7 @@ export type BookingType = {
   image?: string
 }
 
-const API_URL = "http://localhost:5000"
+const API_URL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}`
 
 const MyBookingsPage = async () => {
   //server-side session

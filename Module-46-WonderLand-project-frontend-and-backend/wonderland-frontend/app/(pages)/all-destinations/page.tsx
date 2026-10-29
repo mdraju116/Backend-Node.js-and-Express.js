@@ -28,7 +28,7 @@ type Destination = {
   description: string
 }
 
-const API_URL = "http://localhost:5000/packages"
+const API_URL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/packages`
 
 const priceRanges = [
   { value: "all", label: "All Prices", min: 0, max: Infinity },

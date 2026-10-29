@@ -37,7 +37,7 @@ export default function DeleteDestination({
     try {
       const jwtToken = await getClientToken()
       const res = await fetch(
-        `http://localhost:5000/packages/${destination._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/packages/${destination._id}`,
         {
           method: "DELETE",
           headers: {
@@ -55,7 +55,7 @@ export default function DeleteDestination({
 
       toast.success("Destination deleted successfully!")
       setOpen(false)
-      // The detail page no longer exists — go back to the list, fresh data
+      // The detail page no longer exists â€” go back to the list, fresh data
       router.push("/all-destinations")
       router.refresh()
     } catch (error) {

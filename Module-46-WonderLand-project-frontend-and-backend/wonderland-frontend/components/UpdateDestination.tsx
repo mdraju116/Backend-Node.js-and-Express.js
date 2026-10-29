@@ -92,7 +92,7 @@ export default function UpdateDestination({
       const jwtToken = await getClientToken()
 
       const res = await fetch(
-        `http://localhost:5000/packages/${destination._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/packages/${destination._id}`,
         {
           method: "PATCH",
           headers: {

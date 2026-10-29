@@ -19,7 +19,7 @@ export type DestinationType = {
   description: string
 }
 
-const API_URL = "http://localhost:5000/packages"
+const API_URL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/packages`
 
 async function fetchDestination(
   destid: string
@@ -65,14 +65,14 @@ const DestinationDetailsPage = async ({
   const duration = destination.duration.trim()
   const description = destination.description.trim()
 
-  // The API has no highlights field — break the description into sentences
+  // The API has no highlights field â€” break the description into sentences
   const highlights = description
     .split(/(?<=\.)\s+/)
     .map((sentence) => sentence.trim())
     .filter(Boolean)
     .slice(0, 6)
 
-  // Fixed values from the design mock — the API has no rating field
+  // Fixed values from the design mock â€” the API has no rating field
   const rating = 4.9
   const reviewCount = 2341
 
