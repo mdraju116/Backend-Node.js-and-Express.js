@@ -45,7 +45,7 @@ iIxIiwiaWF0IjoxNzkzMjAzNTY4LCJleHAiOjE3OTM4MDgzNjh9.Wap2F1m5V_3DCij0kCDXtoi1YaSe
 
 ✅✅Step-1 : Access the JWT token at frontend (my-bookings/page.tsx)
 
- //accessing jwt token
+ //accessing jwt token at server-component
   const jwtToken= await auth.api.getToken({
     headers : await headers(),
   })
@@ -63,7 +63,7 @@ iIxIiwiaWF0IjoxNzkzMjAzNTY4LCJleHAiOjE3OTM4MDgzNjh9.Wap2F1m5V_3DCij0kCDXtoi1YaSe
     )
 
 
-✅✅Step-2 : Retrive the token at Backend (index.js)
+✅✅Step-2 : Verify the token at Backend (index.js)
 
  c48-6 : Verify-JWT-on-Backend
 

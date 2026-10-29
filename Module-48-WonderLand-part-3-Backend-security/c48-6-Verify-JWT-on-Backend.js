@@ -52,6 +52,7 @@
                 )
                 const { payload } = await jwtVerify(token, JWKS);
                 next();
+                console.log(payload);
                 return payload
             } catch (error) {
                 console.error('Token validation failed:', error)
@@ -71,6 +72,7 @@
 
 
 -Now if you can see the jwt token at server console for this :(console.log(token);)
+-and the real data as payload for this : (console.log(payload);)
 -then it is okay
 -Well done
 

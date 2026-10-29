@@ -55,7 +55,7 @@ const MyBookingsPage = async () => {
   let bookings: BookingType[] = []
   let fetchFailed = false
 
-  //accessing jwt token
+  //accessing jwt token at server-component
   const jwtToken= await auth.api.getToken({
     headers : await headers(),
   })

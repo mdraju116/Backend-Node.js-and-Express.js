@@ -1,7 +1,6 @@
 /* 
 -go to :  https://better-auth.com/docs/plugins/jwt#installation
 
-
 ✅1.Add the plugin to your auth config (auth.ts)
 -copy this and paste to auth.ts: (see full code under step-2)
 

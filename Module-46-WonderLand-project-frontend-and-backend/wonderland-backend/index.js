@@ -6,7 +6,7 @@ import { jwtVerify, createRemoteJWKSet } from 'jose'
 
 
 const app = express();
-const port = process.env.port || 5000;
+const port = process.env.PORT || process.env.port || 5000;
 app.use(express.json());
 
 //to connect frontend with server
@@ -34,7 +34,7 @@ app.use(
 // }
 
 
-//verify jwt token - c48-6
+//verify jwt token 
 const verifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -46,6 +46,7 @@ const verifyToken = async (req, res, next) => {
     )
     const { payload } = await jwtVerify(token, JWKS);
     next();
+    console.log(payload);
     return payload
   } catch (error) {
     console.error('Token validation failed:', error)
@@ -54,8 +55,7 @@ const verifyToken = async (req, res, next) => {
 
 }
 
-
-
+const isValidObjectId = (id) => ObjectId.isValid(id) && String(new ObjectId(id)) === id;
 
 //server home-page => http://localhost:5000/
 app.get("/", (req, res) => {
@@ -64,16 +64,15 @@ app.get("/", (req, res) => {
 
 
 // connect to database
+if (!process.env.MONGODB_URI) {
+  throw new Error("MONGODB_URI is required");
+}
 const client = new MongoClient(process.env.MONGODB_URI);
 
 export async function connectToMongoDB() {
-  try {
-    await client.connect();
-    console.log("You successfully connected to MongoDB!");
-    return client;
-  } catch (err) {
-    console.dir(err);
-  }
+  await client.connect();
+  console.log("You successfully connected to MongoDB!");
+  return client;
 }
 const connectedClient = await connectToMongoDB();
 
@@ -87,7 +86,7 @@ const bookingCollections = database.collection("bookings");
 //CRUD-operations
 
 //1.send packages to database => http://localhost:5000/add-package
-app.post("/add-package", async (req, res) => {
+app.post("/add-package", verifyToken,async (req, res) => {
   const newPackage = req.body;
   console.log("data from client:", newPackage);
   // const result = res.send({ message: "Data Added to Server" });
@@ -109,6 +108,10 @@ app.get("/packages/:id", async (req, res) => {
   console.log("userId:", req.params);
   const id = req.params.id;
 
+  if (!isValidObjectId(id)) {
+    return res.status(400).send({ message: "Invalid package ID" });
+  }
+
   const query = { _id: new ObjectId(id) };
   const result = await packages.findOne(query);
   res.send(result);
@@ -117,6 +120,9 @@ app.get("/packages/:id", async (req, res) => {
 //3.Update single package by id =>http://localhost:5000/packages/{id}
 app.patch("/packages/:id", async (req, res) => {
   const id = req.params.id;
+  if (!isValidObjectId(id)) {
+    return res.status(400).send({ message: "Invalid package ID" });
+  }
   const updatedPackage = req.body;
   console.log("Updating package:", id, updatedPackage);
 
@@ -130,6 +136,9 @@ app.patch("/packages/:id", async (req, res) => {
 //4.Delete  single-package by id => http://localhost:5000/packages/{id}
 app.delete("/packages/:id", async (req, res) => {
   const id = req.params.id;
+  if (!isValidObjectId(id)) {
+    return res.status(400).send({ message: "Invalid package ID" });
+  }
   const query = { _id: new ObjectId(id) }
   const result = await packages.deleteOne(query);
   res.send(result);
@@ -154,6 +163,9 @@ app.get("/my-bookings/:email", verifyToken, async (req, res) => {
 //delete my-bookings: http://localhost:5000/my-bookings/{id}
 app.delete("/my-bookings/:id", async (req, res) => {
   const id = req.params.id;
+  if (!isValidObjectId(id)) {
+    return res.status(400).send({ message: "Invalid booking ID" });
+  }
   const query = { _id: new ObjectId(id) };
   const result = await bookingCollections.deleteOne(query);
   res.send(result);

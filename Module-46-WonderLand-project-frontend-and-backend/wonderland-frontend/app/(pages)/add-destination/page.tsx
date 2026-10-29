@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import toast from "react-hot-toast"
+import { authClient } from "@/lib/auth-client"
 
 const categories = [
   "Beach",
@@ -63,10 +64,20 @@ export default function AddDestination() {
     e.preventDefault()
 
     try {
+      //accessing jwt token from client component
+      const { data, error } = await authClient.token();
+      if (error || !data?.token) {
+        toast.error("Error accessing JWT token")
+        return
+      }
+      const jwtToken = data.token ;
+
       const res = await fetch("http://localhost:5000/add-package", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          //send token
+          "Authorization": `Bearer ${jwtToken}`
         },
         body: JSON.stringify(form),
       })
