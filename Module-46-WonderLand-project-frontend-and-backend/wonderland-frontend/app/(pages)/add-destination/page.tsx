@@ -64,16 +64,15 @@ export default function AddDestination() {
     e.preventDefault()
 
     try {
-      
-      //accessing jwt token for client component 
-      const jwtToken = await getClientToken(); // (@/lib/access-jwt-at-client-component")
+      //accessing jwt token for client component
+      const jwtToken = await getClientToken() // (@/lib/access-jwt-at-client-component")
 
       const res = await fetch("http://localhost:5000/add-package", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           //send token
-          "Authorization": `Bearer ${jwtToken}`
+          Authorization: `Bearer ${jwtToken}`,
         },
         body: JSON.stringify(form),
       })

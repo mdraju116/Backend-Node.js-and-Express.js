@@ -57,17 +57,17 @@ const MyBookingsPage = async () => {
   let fetchFailed = false
 
   //accessing jwt token for server-component
-  const jwtToken= await getServerToken() ; // @/lib/access-jwt-at-server-component"
+  const jwtToken = await getServerToken() // @/lib/access-jwt-at-server-component"
 
   try {
     const res = await fetch(
-      `${API_URL}/my-bookings/${encodeURIComponent(user.email)}`,{
-
+      `${API_URL}/my-bookings/${encodeURIComponent(user.email)}`,
+      {
         // send the jwt token to server
-        headers:{
-              "authorization" : `Bearer ${jwtToken?.token}`
-            }
-          }
+        headers: {
+          authorization: `Bearer ${jwtToken?.token}`,
+        },
+      }
     )
 
     if (!res.ok) {

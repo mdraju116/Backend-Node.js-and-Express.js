@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { type DestinationType } from "@/app/(pages)/all-destinations/[destid]/page"
+import { getClientToken } from "@/lib/access-jwt-at-client-component"
 
 type DeleteDestinationProps = {
   destination: DestinationType
@@ -34,10 +35,14 @@ export default function DeleteDestination({
   const handleDeleteDestination = async () => {
     setDeleting(true)
     try {
+      const jwtToken = await getClientToken()
       const res = await fetch(
         `http://localhost:5000/packages/${destination._id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
         }
       )
 

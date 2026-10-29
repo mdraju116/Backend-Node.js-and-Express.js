@@ -12,7 +12,7 @@ app.use(express.json());
 //to connect frontend with server
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: `${process.env.FRONTEND_URL}`,
   }),
 );
 
@@ -42,7 +42,7 @@ const verifyToken = async (req, res, next) => {
 
     console.log(token);
     const JWKS = createRemoteJWKSet(
-      new URL('http://localhost:3000/api/auth/jwks')
+      new URL(`${process.env.FRONTEND_URL}/api/auth/jwks `)
     )
     const { payload } = await jwtVerify(token, JWKS);
     next();
@@ -98,8 +98,8 @@ app.post("/add-package", verifyToken,async (req, res) => {
 
 //2a.get all packages from database => http://localhost:5000/packages
 app.get("/packages", async (req, res) => {
-  const cursor = packages.find({});
-  const allPackages = await cursor.toArray();
+  const getPackages = packages.find({});
+  const allPackages = await getPackages.toArray();
   res.send(allPackages);
 });
 
@@ -134,7 +134,7 @@ app.patch("/packages/:id", verifyToken,async (req, res) => {
 });
 
 //4.Delete  single-package by id => http://localhost:5000/packages/{id}
-app.delete("/packages/:id", async (req, res) => {
+app.delete("/packages/:id",verifyToken, async (req, res) => {
   const id = req.params.id;
   if (!isValidObjectId(id)) {
     return res.status(400).send({ message: "Invalid package ID" });
@@ -169,6 +169,12 @@ app.delete("/my-bookings/:id", async (req, res) => {
   const query = { _id: new ObjectId(id) };
   const result = await bookingCollections.deleteOne(query);
   res.send(result);
+})
+
+//http://localhost:5000/featured-packages
+app.get("/featured-packages", async(req,res)=>{
+  const featured =await packages.find().limit(5).toArray();
+  res.send(featured);
 })
 
 app.listen(port, () => {

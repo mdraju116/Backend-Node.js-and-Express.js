@@ -89,8 +89,7 @@ export default function UpdateDestination({
 
     setSaving(true)
     try {
-
-      const jwtToken = await getClientToken();
+      const jwtToken = await getClientToken()
 
       const res = await fetch(
         `http://localhost:5000/packages/${destination._id}`,
@@ -98,7 +97,7 @@ export default function UpdateDestination({
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${jwtToken}`
+            Authorization: `Bearer ${jwtToken}`,
           },
           body: JSON.stringify(form),
         }

@@ -1,25 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server"
+import { auth } from "@/lib/auth"
 
 export async function proxy(request: NextRequest) {
-	
   const session = await auth.api.getSession({
     headers: request.headers,
-  });
+  })
 
   if (!session) {
-    const signInUrl = new URL("/sign-in", request.url);
+    const signInUrl = new URL("/sign-in", request.url)
 
-    signInUrl.searchParams.set("message", "login-required");
-    signInUrl.searchParams.set(
-      "callbackURL",
-      request.nextUrl.pathname
-    );
+    signInUrl.searchParams.set("message", "login-required")
+    signInUrl.searchParams.set("callbackURL", request.nextUrl.pathname)
 
-    return NextResponse.redirect(signInUrl);
+    return NextResponse.redirect(signInUrl)
   }
 
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
 export const config = {
@@ -28,4 +24,4 @@ export const config = {
     "/my-bookings/:path*",
     "/add-destination/:path*",
   ],
-};
+}
