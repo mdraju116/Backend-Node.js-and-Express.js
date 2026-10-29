@@ -26,7 +26,7 @@ const features = [
 
 export function WhyChooseUs() {
   return (
-    <section className="rounded-2xl border border-teal-200 bg-gradient-to-b from-cyan-50 to-white">
+    <section className="rounded-2xl border border-teal-200 bg-linear-to-b from-cyan-50 to-white">
       <div className="mx-auto max-w-6xl px-6 py-16 text-center md:py-20">
         <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
           Why Choose Wanderlust
