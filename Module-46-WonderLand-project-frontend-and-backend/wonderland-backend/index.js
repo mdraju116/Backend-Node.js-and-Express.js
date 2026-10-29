@@ -118,7 +118,7 @@ app.get("/packages/:id", async (req, res) => {
 });
 
 //3.Update single package by id =>http://localhost:5000/packages/{id}
-app.patch("/packages/:id", async (req, res) => {
+app.patch("/packages/:id", verifyToken,async (req, res) => {
   const id = req.params.id;
   if (!isValidObjectId(id)) {
     return res.status(400).send({ message: "Invalid package ID" });

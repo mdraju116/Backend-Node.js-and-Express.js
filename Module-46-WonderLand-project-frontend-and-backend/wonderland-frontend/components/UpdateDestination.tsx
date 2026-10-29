@@ -26,6 +26,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import toast from "react-hot-toast"
 import { type DestinationType } from "@/app/(pages)/all-destinations/[destid]/page"
+import { getClientToken } from "@/lib/access-jwt-at-client-component"
 
 const categories = [
   "Beach",
@@ -88,12 +89,16 @@ export default function UpdateDestination({
 
     setSaving(true)
     try {
+
+      const jwtToken = await getClientToken();
+
       const res = await fetch(
         `http://localhost:5000/packages/${destination._id}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${jwtToken}`
           },
           body: JSON.stringify(form),
         }

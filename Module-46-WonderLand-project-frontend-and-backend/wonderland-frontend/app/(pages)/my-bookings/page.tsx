@@ -5,6 +5,7 @@ import { CalendarX, Plus } from "lucide-react"
 import { auth } from "@/lib/auth"
 import MyBookingCard from "@/components/MyBookingCard"
 import { buttonVariants } from "@/components/ui/button"
+import { getServerToken } from "@/lib/access-jwt-at-server-component"
 
 export type BookingType = {
   _id: string
@@ -55,18 +56,16 @@ const MyBookingsPage = async () => {
   let bookings: BookingType[] = []
   let fetchFailed = false
 
-  //accessing jwt token at server-component
-  const jwtToken= await auth.api.getToken({
-    headers : await headers(),
-  })
-  console.log(jwtToken?.token);
+  //accessing jwt token for server-component
+  const jwtToken= await getServerToken() ; // @/lib/access-jwt-at-server-component"
 
   try {
     const res = await fetch(
       `${API_URL}/my-bookings/${encodeURIComponent(user.email)}`,{
+
         // send the jwt token to server
         headers:{
-              authorization : `Bearer ${jwtToken?.token}`
+              "authorization" : `Bearer ${jwtToken?.token}`
             }
           }
     )
