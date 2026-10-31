@@ -12,7 +12,11 @@ app.use(express.json());
 //to connect frontend with server
 app.use(
   cors({
-    origin: `${process.env.FRONTEND_URL}`,
+    // origin: `${process.env.FRONTEND_URL}`,
+     origin: [
+      `${process.env.FRONTEND_URL_LOCAL}`,
+      `${process.env.FRONTEND_URL_VERCEL}`,
+    ],
   }),
 );
 

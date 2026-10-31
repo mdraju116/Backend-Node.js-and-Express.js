@@ -174,7 +174,7 @@ function FeaturedCarousel({ packages }: { packages: FeaturedPackage[] }) {
           {packages.map((item) => (
             <CarouselItem
               key={item._id}
-              className="md:basis-[min(calc(45%_-_0.5rem),36rem)]"
+              className="md:basis-[min(calc(45%-0.5rem),36rem)]"
             >
               <FeaturedCard item={item} />
             </CarouselItem>
