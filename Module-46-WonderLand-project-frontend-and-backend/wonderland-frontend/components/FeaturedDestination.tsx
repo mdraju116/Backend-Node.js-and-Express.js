@@ -33,6 +33,7 @@ type FeaturedPackage = {
 }
 
 const API_URL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/featured-packages`
+// trailor / removed
 
 // The design mock shows a rating badge on every card; the API has no rating field
 const rating = 4.5
