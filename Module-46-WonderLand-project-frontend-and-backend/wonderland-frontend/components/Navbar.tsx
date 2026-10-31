@@ -7,7 +7,7 @@ const leftLinks = [
   { label: "Destinations", href: "/all-destinations" },
   { label: "Add-Destination", href: "/add-destination" },
   { label: "My Bookings", href: "/my-bookings" },
-  { label: "Admin", href: "/admin" },
+  // { label: "Admin", href: "/admin" },
 ]
 
 // const rightLinks = [
